@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Data Extractor",
+  "version": "1.0.0",
+  "description": "Capture fields across multiple pages and copy them as one Excel-ready row.",
+  "permissions": ["storage", "scripting", "activeTab"],
+  "host_permissions": ["https://*/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Data Extractor"
+  }
+}
