@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <style>
+        :root {
+            --ink: #16191d;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+            --bg: #ffffff;
+            --fill: #f6f7f9;
+            --accent: #0f6f5c;
+            --accent-soft: #e6f2ef;
+            --warn: #92400e;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 340px;
+            margin: 0;
+            padding: 14px;
+            font:
+                14px/1.45 system-ui,
+                -apple-system,
+                "Segoe UI",
+                sans-serif;
+            color: var(--ink);
+            background: var(--bg);
+        }
+
+        header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0;
+            letter-spacing: -0.01em;
+        }
+
+        #page-tag {
+            font:
+                11px ui-monospace,
+                SFMono-Regular,
+                Menlo,
+                monospace;
+            color: var(--muted);
+            text-align: right;
+        }
+
+        #page-tag.matched {
+            color: var(--accent);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 5px 6px;
+            border-bottom: 1px solid var(--line);
+            vertical-align: top;
+        }
+
+        th {
+            width: 38%;
+            font-weight: 500;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        td {
+            font:
+                12px ui-monospace,
+                SFMono-Regular,
+                Menlo,
+                monospace;
+            word-break: break-word;
+        }
+
+        td.empty {
+            color: #b6bbc2;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .row {
+            display: flex;
+            gap: 6px;
+        }
+
+        button {
+            flex: 1;
+            padding: 7px 10px;
+            font: inherit;
+            font-weight: 500;
+            color: var(--ink);
+            background: var(--fill);
+            border: 1px solid var(--line);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover:not(:disabled) {
+            background: #eceef1;
+        }
+
+        button:disabled {
+            opacity: 0.45;
+            cursor: default;
+        }
+
+        button.primary {
+            color: #fff;
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        button.primary:hover:not(:disabled) {
+            background: #0b5a4a;
+        }
+
+        button.quiet {
+            flex: 0 0 auto;
+            color: var(--muted);
+        }
+
+        #status {
+            margin-top: 10px;
+            min-height: 16px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        #status.ok {
+            color: var(--accent);
+        }
+
+        #status.warn {
+            color: var(--warn);
+        }
+
+        #buffer {
+            margin-top: 8px;
+            padding: 6px 8px;
+            border-radius: 5px;
+            background: var(--accent-soft);
+            font-size: 12px;
+            color: var(--accent);
+        }
+
+        #buffer:empty {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Data Extractor</h1>
+        <span id="page-tag">no page matched</span>
+    </header>
+
+    <table id="draft"></table>
+
+    <div class="actions">
+        <button id="capture" class="primary">Capture from this page</button>
+        <div class="row">
+            <button id="save">Save row</button>
+            <button id="copy">Copy rows</button>
+            <button id="clear" class="quiet" title="Clear everything">Clear</button>
+        </div>
+    </div>
+
+    <div id="buffer"></div>
+    <div id="status"></div>
+
+    <script src="config.js"></script>
+</body>
+
+</html>
