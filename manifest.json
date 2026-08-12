@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Capture fields across multiple pages and copy them as one Excel-ready row.",
   "permissions": ["storage", "scripting", "activeTab"],
-  "host_permissions": ["https://*/*"],
+  "host_permissions": ["https://aibl.rtomanager.com.au/*"],
   "action": {
     "default_popup": "popup.html",
     "default_title": "Data Extractor"
