@@ -150,7 +150,7 @@ async function render() {
     .map((c) => {
       const v = draft[c];
       const filled = v !== undefined && v !== "";
-      return `<tr><th>${c}</th><td class="${filled ? "" : "empty"}">${
+      return `<tr><th>${escapeHtml(c)}</th><td class="${filled ? "" : "empty"}">${
         filled ? escapeHtml(v) : "—"
       }</td></tr>`;
     })
@@ -196,18 +196,25 @@ async function capture() {
 
   const state = await getState();
 
-  // Identity guard: bail out before writing anything if this page belongs to a
-  // different student than the one already in the draft.
-  for (const [column, rule] of Object.entries(verify)) {
-    const onPage = applyTransform(rule, result[column] || "");
-    const inDraft = state.draft[column] || "";
-    if (onPage && inDraft && !sameId(onPage, inDraft)) {
+  // Identity guard: bail out before writing anything if this page describes a
+  // different record than the one already in the draft. This runs on every
+  // page, not just the one carrying `verify`, so capture order does not matter.
+  const rules = { ...matchedPage.fields, ...verify };
+  for (const column of IDENTITY_COLUMNS) {
+    const onPage = applyTransform(rules[column], result[column] || "");
+    if (!onPage) continue;
+
+    const known = state.draft[VERIFIED] || state.draft[column] || "";
+    if (known && !sameId(onPage, known)) {
       say(
-        `Student mismatch — page shows ${onPage}, draft holds ${inDraft}. Nothing captured. Clear the draft or open the right student.`,
+        `Record mismatch — page shows ${onPage}, draft holds ${known}. Nothing captured. Clear the draft or open the right record.`,
         "warn",
       );
       return;
     }
+
+    // Only a `verify` field counts as confirmation; a plain column is just data.
+    if (verify[column]) state.draft[VERIFIED] = onPage;
   }
 
   const found = [];
@@ -222,8 +229,6 @@ async function capture() {
       missing.push(column);
     }
   }
-
-  if (Object.keys(verify).length) state.draft[VERIFIED] = true;
 
   await setState(state);
   await render();
@@ -247,17 +252,22 @@ async function capture() {
   );
 }
 
-// Columns - Page 2
+// Columns that only a verified page can supply.
 const guardedColumns = CONFIG.pages
   .filter((p) => p.verify)
   .flatMap((p) => Object.keys(p.fields));
+
+// Columns used to confirm that two pages describe the same record.
+const IDENTITY_COLUMNS = [
+  ...new Set(CONFIG.pages.flatMap((p) => Object.keys(p.verify || {}))),
+];
 
 async function saveRow({ autoCopied = false } = {}) {
   const state = await getState();
   if (!CONFIG.columns.some((c) => state.draft[c])) return;
 
   if (guardedColumns.some((c) => state.draft[c]) && !state.draft[VERIFIED]) {
-    say("Row not verified against the student ID — not saved.", "warn");
+    say("Row not verified against the record ID — not saved.", "warn");
     return;
   }
 
