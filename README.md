@@ -61,6 +61,10 @@ Everything lives in `config.js`.
 - `pages` — one entry per page, with a `match` pattern for the URL and a
   `fields` map of column name to CSS selector.
 
+Anchor each `match` to the full origin (`/^https:\/\/example\.com\/records\/detail/i`)
+rather than the path alone. A path-only pattern would let any site serving that
+path pose as a recognised page and feed values into your row.
+
 To add a field, find its selector in the browser (right click → Inspect) and
 add a line under that page's `fields`. Add the column name to `columns` too.
 
@@ -82,6 +86,12 @@ Everything stays on your machine — captured values live in
 `chrome.storage.local` and on your clipboard, and the extension makes no
 network requests. It reads only the pages you point it at, and only when you
 click **Capture**.
+
+Saved rows persist in local storage until you click **Clear**, so if you capture
+personal data, clear the buffer when you're done rather than leaving it there.
+
+Values beginning with `=`, `+`, `-` or `@` are prefixed with an apostrophe when
+copied, so text from a page can't paste into Excel as a live formula.
 
 This repository ships a generic example configuration and is not affiliated
 with, or targeted at, any particular site or organisation.

@@ -1,5 +1,8 @@
 // Copy this file to `config.js` and point it at your own site.
 // `config.js` is gitignored, so your real selectors stay local.
+//
+// Anchor every `match` to your origin, not just the path: an unanchored
+// pattern lets any site serving that path pose as a recognised page.
 
 const GRID_ROW = "#records-grid tbody tr:nth-of-type(2)";
 
@@ -21,7 +24,7 @@ const CONFIG = {
   pages: [
     {
       name: "Page 1 - record home",
-      match: /\/records\/detail/i,
+      match: /^https:\/\/example\.com\/records\/detail/i,
       fields: {
         Id: { selector: `${GRID_ROW} td:nth-child(1)` },
         Title: { selector: `${GRID_ROW} td:nth-child(2)` },
@@ -33,7 +36,7 @@ const CONFIG = {
     },
     {
       name: "Page 2 - enrolment",
-      match: /\/records\/enrolment/i,
+      match: /^https:\/\/example\.com\/records\/enrolment/i,
       fields: {
         CourseName: {
           selector: "#field-course",
