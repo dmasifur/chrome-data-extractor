@@ -129,11 +129,19 @@ async function copyText(text) {
   }
 }
 
-const cell = (v) =>
-  (v ?? "")
+// Excel runs a cell beginning with = + - or @ as a formula, so text captured
+// from a page could execute on paste. Prefix those with an apostrophe to keep
+// them literal, while letting ordinary negative numbers through untouched.
+const FORMULA_START = /^[=+\-@]/;
+const PLAIN_NUMBER = /^[+-]?\d+(?:[.,]\d+)?$/;
+
+const cell = (v) => {
+  const text = (v ?? "")
     .toString()
     .replace(/[\t\r\n]+/g, " ")
     .trim();
+  return FORMULA_START.test(text) && !PLAIN_NUMBER.test(text) ? `'${text}` : text;
+};
 const toTsv = (rows) =>
   rows.map((r) => CONFIG.columns.map((c) => cell(r[c])).join("\t")).join("\n");
 
