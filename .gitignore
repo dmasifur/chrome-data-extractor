@@ -1,0 +1,5 @@
+# Local target configuration — copy config.example.js to config.js
+config.js
+
+.DS_Store
+node_modules/
