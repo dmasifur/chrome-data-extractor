@@ -1,4 +1,7 @@
-const GRID_ROW = "#ctl00_Main_GridView1 tbody tr:nth-of-type(2)";
+// Copy this file to `config.js` and point it at your own site.
+// `config.js` is gitignored, so your real selectors stay local.
+
+const GRID_ROW = "#records-grid tbody tr:nth-of-type(2)";
 
 const CONFIG = {
   columns: [
@@ -7,7 +10,7 @@ const CONFIG = {
     "FirstName",
     "LastName",
     "DOB",
-    "CollegeEmail",
+    "Email",
     "CourseName",
     "StartDate",
     "EndDate",
@@ -17,41 +20,41 @@ const CONFIG = {
 
   pages: [
     {
-      name: "Page 1 - std home",
-      match: /\/SSPages\/SS_StdHome/i,
+      name: "Page 1 - record home",
+      match: /\/records\/detail/i,
       fields: {
         Id: { selector: `${GRID_ROW} td:nth-child(1)` },
         Title: { selector: `${GRID_ROW} td:nth-child(2)` },
         FirstName: { selector: `${GRID_ROW} td:nth-child(3)` },
         LastName: { selector: `${GRID_ROW} td:nth-child(4)` },
         DOB: { selector: `${GRID_ROW} td:nth-child(8)` },
-        CollegeEmail: { selector: `${GRID_ROW} td:nth-child(11)` },
+        Email: { selector: `${GRID_ROW} td:nth-child(11)` },
       },
     },
     {
-      name: "Page 2 - st enrol",
-      match: /\/SSPages\/SS_StdEnroll/i,
+      name: "Page 2 - enrolment",
+      match: /\/records\/enrolment/i,
       fields: {
         CourseName: {
-          selector: "#ctl00_Main_1stCourse",
+          selector: "#field-course",
           label: "Course",
           transform: "courseName",
         },
         StartDate: {
-          selector: "#ctl00_Main_lblStartDate",
+          selector: "#field-start-date",
           label: "Start Date",
           transform: "longDate",
         },
         EndDate: {
-          selector: "#ctl00_Main_lblFinishDate",
+          selector: "#field-finish-date",
           label: "Finish Date",
           transform: "longDate",
         },
       },
       // Read but never written to a column: guards against merging two
-      // different students into one row.
+      // different records into one row.
       verify: {
-        Id: { selector: "#ctl00_Main_lblStudentID", label: "Student ID" },
+        Id: { selector: "#label-record-id", label: "Record ID" },
       },
     },
   ],
